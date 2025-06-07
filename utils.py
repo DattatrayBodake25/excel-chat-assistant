@@ -28,11 +28,11 @@ def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
 #writing function to check column types
 def check_column_types(df: pd.DataFrame) -> dict:
     #Detecting column types: numerical, categorical, boolean, datetime.
-    types = {
-        "numerical": [],
-        "categorical": [],
-        "boolean": [],
-        "datetime": []
+    column_types = {
+        "numerical_type": [],
+        "categorical_type": [],
+        "boolean_type": [],
+        "datetime_type": []
     }
 
     for column in df.columns:
@@ -40,12 +40,12 @@ def check_column_types(df: pd.DataFrame) -> dict:
 
         # Boolean data type detection
         if pd.api.types.is_bool_dtype(column_data):
-            types["boolean"].append(column)
+            column_types["boolean_type"].append(column)
             continue
 
         # Numerical datatype detection
         if pd.api.types.is_numeric_dtype(column_data):
-            types["numerical"].append(column)
+            column_types["numerical_type"].append(column)
             continue
 
         # Datetime detection with parsing
@@ -53,13 +53,13 @@ def check_column_types(df: pd.DataFrame) -> dict:
             parsed_dates = pd.to_datetime(column_data, errors="coerce", dayfirst=False)
             valid_count = parsed_dates.notna().sum()
             if valid_count / len(column_data) > 0.7:
-                types["datetime"].append(column)
+                column_types["datetime_type"].append(column)
                 continue
         except Exception:
             pass
 
         #Categorical columns
-        types["categorical"].append(column)
+        column_types["categorical_type"].append(column)
 
     #return types of columns
-    return types
+    return column_types
