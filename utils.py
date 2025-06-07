@@ -1,31 +1,33 @@
+#here importing all required libraries
 import pandas as pd
 import re
 
-def normalize_column_name(col: str) -> str:
-    """
-    Normalize a column name:
-    - Lowercase
-    - Remove special characters
-    - Replace spaces with underscores
-    """
-    col = col.strip().lower()
-    col = re.sub(r"[^\w\s]", "", col)      # Remove special characters
-    col = re.sub(r"\s+", "_", col)         # Replace spaces with underscores
-    return col
 
-def preprocess_dataframe(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Normalize column names across the DataFrame.
-    """
+#writing here function to process column names
+def clean_column_name(column: str) -> str:
+    #lowercasing column names
+    column = column.strip().lower()
+
+    #removing special characters
+    column = re.sub(r"[^\w\s]", "", column)
+
+    #replacing spaces with underscores
+    column = re.sub(r"\s+", "_", column)
+    
+    #return clean column names
+    return column
+
+
+#writing function to prepare dataset here
+def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
-    df.columns = [normalize_column_name(col) for col in df.columns]
+    df.columns = [clean_column_name(column) for column in df.columns]
     return df
 
-def detect_column_types(df: pd.DataFrame) -> dict:
-    """
-    Detect column types: numerical, categorical, boolean, datetime.
-    - Applies parsing to identify datetime columns even if they are stored as strings.
-    """
+
+#writing function to check column types
+def check_column_types(df: pd.DataFrame) -> dict:
+    #Detecting column types: numerical, categorical, boolean, datetime.
     types = {
         "numerical": [],
         "categorical": [],
@@ -33,30 +35,31 @@ def detect_column_types(df: pd.DataFrame) -> dict:
         "datetime": []
     }
 
-    for col in df.columns:
-        col_data = df[col].dropna()
+    for column in df.columns:
+        column_data = df[column].dropna()
 
-        # Boolean detection
-        if pd.api.types.is_bool_dtype(col_data):
-            types["boolean"].append(col)
+        # Boolean data type detection
+        if pd.api.types.is_bool_dtype(column_data):
+            types["boolean"].append(column)
             continue
 
-        # Numeric detection
-        if pd.api.types.is_numeric_dtype(col_data):
-            types["numerical"].append(col)
+        # Numerical datatype detection
+        if pd.api.types.is_numeric_dtype(column_data):
+            types["numerical"].append(column)
             continue
 
         # Datetime detection with parsing
         try:
-            parsed_dates = pd.to_datetime(col_data, errors="coerce", dayfirst=False)
+            parsed_dates = pd.to_datetime(column_data, errors="coerce", dayfirst=False)
             valid_count = parsed_dates.notna().sum()
-            if valid_count / len(col_data) > 0.7:
-                types["datetime"].append(col)
+            if valid_count / len(column_data) > 0.7:
+                types["datetime"].append(column)
                 continue
         except Exception:
             pass
 
-        # Fallback: Categorical
-        types["categorical"].append(col)
+        #Categorical columns
+        types["categorical"].append(column)
 
+    #return types of columns
     return types
