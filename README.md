@@ -45,7 +45,6 @@ streamlit run app.py
 ## Notes
 - Supports datasets with a wide range of column schemas.
 - Chart suggestions are based on Gemini’s interpretation but can be overridden.
-- API usage may have rate limits depending on your Gemini plan.
 
 ## Credits
 - Built using Streamlit, Pandas, Plotly, and Google Gemini LLM API.
