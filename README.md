@@ -14,14 +14,14 @@ This is a Streamlit-based chatbot that allows users to upload Excel or CSV files
 
 ## Setup Instructions
 1. Clone the repo:
-`bash
+```
 git clone https://github.com/DattatrayBodake25/excel-chat-assistant
-`
+```
 2. Install dependencies:
-`bash
+```
 pip install -r requirements.txt
-`
-3. Set your Gemini API key as an environment variable:
+```
+4. Set your Gemini API key as an environment variable:
 - Linux/macOS:
   ```
   export GEMINI_API_KEY="your_api_key_here"
@@ -31,9 +31,9 @@ pip install -r requirements.txt
   set GEMINI_API_KEY="your_api_key_here"
   ```
 4. Run the Streamlit app:
-`bash
+```
 streamlit run app.py
-`
+```
 
 ## Usage
 - Upload your Excel or CSV file in the sidebar.
